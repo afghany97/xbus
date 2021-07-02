@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\TripController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(["middleware" => "auth:api"], function ($router) {
     $router->post('logout', [AuthController::class, 'logout']);
+
+
+    $router->get('trips/{id}/search', [TripController::class, 'search']);
 });
 
 Route::post('login', [AuthController::class, 'login']);

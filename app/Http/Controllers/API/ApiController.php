@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
+use App\Services\Service;
 
 class ApiController extends Controller
 {
     /**
-     * @param array $payload
-     * @param int $statusCode
-     * @return JsonResponse
+     * @var Service
      */
-    final public function response(array $payload, int $statusCode): JsonResponse
+    protected $service;
+
+    /**
+     * ApiController constructor.
+     */
+    public function __construct(Service $service)
     {
-        return response()->json($payload, $statusCode);
+        $this->service = $service;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Utils\HttpStatusCodeUtil;
 use Exception;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
-class AuthController extends ApiController
+class AuthController extends Controller
 {
     /**
      * @param Request $request
