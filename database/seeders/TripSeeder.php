@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Trip;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class TripSeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -13,10 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            StationSeeder::class,
-            TripSeeder::class,
-            TripDestinationsSeeder::class
-        ]);
+        Trip::factory(5)->create();
     }
 }
+
