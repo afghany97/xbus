@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(["middleware" => "auth:api"], function ($router) {
     $router->post('logout', [AuthController::class, 'logout']);
 
-
     $router->get('trips/{id}/search', [TripController::class, 'search']);
+    $router->post('trips/{id}/book', [TripController::class, 'book']);
 });
 
 Route::post('login', [AuthController::class, 'login']);

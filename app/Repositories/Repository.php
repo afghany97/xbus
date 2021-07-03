@@ -10,5 +10,5 @@ abstract class Repository
     /**
      * @return QueryBuilder|ORMBuilder
      */
-    public abstract function builder();
+    protected abstract function builder();
 }

@@ -10,7 +10,7 @@ class TripRepository extends Repository
     /**
      * @inheritDoc
      */
-    public function builder()
+    protected function builder()
     {
         return Trip::query();
     }
@@ -20,7 +20,7 @@ class TripRepository extends Repository
      * @param int $startDestination
      * @return int|null
      */
-    public function getOrderForStartDestination(int $tripId, int $startDestination): ?int
+    private function getOrderForStartDestination(int $tripId, int $startDestination): ?int
     {
         return $this->getOrderForDestination($tripId, $startDestination, "start");
     }
@@ -30,7 +30,7 @@ class TripRepository extends Repository
      * @param int $finalDestination
      * @return int|null
      */
-    public function getOrderForFinalDestination(int $tripId, int $finalDestination): ?int
+    private function getOrderForFinalDestination(int $tripId, int $finalDestination): ?int
     {
         return $this->getOrderForDestination($tripId, $finalDestination, "final");
     }
@@ -54,17 +54,33 @@ class TripRepository extends Repository
 
     /**
      * @param int $tripId
-     * @param int $startOrder
-     * @param int $finalOrder
+     * @param int $startDestination
+     * @param int $finalDestination
      * @return int|null
      */
-    public function getAvailableSeats(int $tripId, int $startOrder, int $finalOrder): ?int
+    public function getAvailableSeats(int $tripId, int $startDestination, int $finalDestination): ?int
     {
         return DB::table("trip_destinations")
             ->where("trip_id", $tripId)
-            ->whereBetween("order", [$startOrder, $finalOrder])
+            ->whereBetween("order", [$this->getOrderForStartDestination($tripId, $startDestination), $this->getOrderForFinalDestination($tripId, $finalDestination)])
             ->select([DB::raw("MAX(booked_seats_count) as booked_seats")])
             ->pluck("booked_seats")
             ->first();
     }
+
+    /**
+     * @param int $tripId
+     * @param int $startDestination
+     * @param int $finalDestination
+     * @param int $numberOfDemandSeats
+     * @return int
+     */
+    public function updateTripDestinations(int $tripId, int $startDestination, int $finalDestination, int $numberOfDemandSeats): int
+    {
+        return DB::table("trip_destinations")
+            ->where("trip_id", $tripId)
+            ->whereBetween("order", [$this->getOrderForStartDestination($tripId, $startDestination), $this->getOrderForFinalDestination($tripId, $finalDestination)])
+            ->increment("booked_seats_count", $numberOfDemandSeats);
+    }
+
 }
